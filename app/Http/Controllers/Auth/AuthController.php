@@ -61,7 +61,7 @@ class AuthController extends Controller
             return ApiResponse::error(
                 message: 'Login failed.',
                 exception: $e->getMessage(),
-                status: 500
+                status: $e->getCode() ?: 500
             );
         }
     }

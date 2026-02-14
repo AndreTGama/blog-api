@@ -6,7 +6,7 @@ use Exception;
 
 class InvalidCredentialsException extends Exception
 {
-    protected $message = 'Credenciais inválidas';
+    protected $message = 'Invalid credentials.';
     protected $code = 401;
 
     public function render($request)
