@@ -23,5 +23,6 @@ class AppServiceProvider extends ServiceProvider
         Gate::policy(\App\Models\User::class, \App\Policies\User\UserPolicy::class);
         Gate::policy(\App\Models\Category::class, \App\Policies\Category\CategoryPolicy::class);
         Gate::policy(\App\Models\Post::class, \App\Policies\Post\PostPolicy::class);
+        Gate::define('viewApiDocs', fn ($user = null) => true);
     }
 }
