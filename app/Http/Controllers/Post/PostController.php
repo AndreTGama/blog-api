@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Post;
 
 use App\DataTransferObjects\Post\Request\StorePostDTO;
+use App\DataTransferObjects\Post\Request\UpdatePostDTO;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Post\IndexPostRequest;
 use App\Http\Requests\Post\StorePostRequest;
@@ -83,7 +84,7 @@ class PostController extends Controller
     public function update(UpdatePostRequest $request, Post $postResource)
     {
         $this->authorize('update', $postResource);
-        $data = $this->postService->update(post: $postResource, dto: StorePostDTO::fromArray($request->validated()));
+        $data = $this->postService->update(post: $postResource, dto: UpdatePostDTO::fromArray($request->validated()));
         return ApiResponse::success(
             message: 'Post updated successfully.',
             data: new PostResource($data),

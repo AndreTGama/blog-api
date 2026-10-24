@@ -3,26 +3,27 @@
 namespace App\DataTransferObjects\Post\Request;
 
 use App\DataTransferObjects\PostMeta\Response\IndexPostMetaDTO;
+use Illuminate\Http\UploadedFile;
 
 class StorePostDTO
 {
     /**
      * Data Transfer Object for storing a new post.
      *
-     * @param string|null $coverImage The URL of the cover image for the post (optional).
+     * @param UploadedFile|string|null $coverImage The uploaded cover image or its existing URL.
      * @param string $title The title of the post.
      * @param string $slug The slug for the post.
      * @param string $excerpt A short excerpt of the post.
-     * @param string $content The main content of the post.
+     * @param string|array $content The post text or ordered content blocks.
      * @param string $status The status of the post (e.g., draft, published).
      * @param IndexPostMetaDTO|null $postMeta The post meta data for the post (optional).
      * @param array $categoryIds An array of category IDs associated with the post.
      */
     public function __construct(
-        public ?string           $coverImage,
+        public UploadedFile|string|null $coverImage,
         public string            $title,
         public string            $excerpt,
-        public string            $content,
+        public string|array      $content,
         public string            $status,
         public ?array            $postMetas,
         public array             $categoryIds
@@ -51,7 +52,7 @@ class StorePostDTO
      * Converts the StorePostDTO object properties to an associative array.
      *
      * @return array{
-     *     cover_image: string|null,
+     *     cover_image: UploadedFile|string|null,
      *     title: string,
      *     slug: string,
      *     excerpt: string,

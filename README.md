@@ -21,6 +21,46 @@ Laravel is a web application framework with expressive, elegant syntax. We belie
 
 Laravel is accessible, powerful, and provides tools required for large, robust applications.
 
+## Conteúdo de posts com blocos de código
+
+O campo `content` aceita tanto o texto simples legado quanto uma lista ordenada de blocos. Use blocos `paragraph` para o texto e `code_tabs` para exibir exemplos selecionáveis no meio do artigo. O mesmo formato pode ser enviado ao criar ou atualizar um post:
+
+```json
+{
+  "content": [
+    {
+      "type": "paragraph",
+      "text": "O padrão Abstract Factory cria famílias de objetos relacionados."
+    },
+    {
+      "type": "code_tabs",
+      "tabs": [
+        {
+          "label": "PHP",
+          "language": "php",
+          "code": "interface UIFactory { public function createButton(): Button; }"
+        },
+        {
+          "label": "TypeScript",
+          "language": "typescript",
+          "code": "interface UIFactory { createButton(): Button; }"
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "text": "O artigo continua normalmente depois do exemplo."
+    }
+  ]
+}
+```
+
+A ordem dos itens em `content` é a ordem em que o artigo deve ser exibido. Cada aba precisa de `label`, `language` e `code`. A API salva esses blocos no campo existente e os devolve como uma lista; posts antigos com `content` em texto continuam sendo retornados como texto. A interface do blog é responsável por renderizar a lista e implementar a seleção visual das abas.
+
+## Imagem de capa do post
+
+O campo opcional `cover_image` aceita uma imagem JPEG, PNG ou WebP de até 2 MB no envio multipart/form-data. A imagem é salva no disco público em `posts/thumbnails`, e a API devolve sua URL no campo `cover_image`. Para disponibilizar arquivos locais, execute `php artisan storage:link`. URLs de imagem já existentes continuam aceitas para manter compatibilidade.
+
 ## Learning Laravel
 
 Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.

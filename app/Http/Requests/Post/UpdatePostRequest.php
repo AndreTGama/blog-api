@@ -3,9 +3,13 @@
 namespace App\Http\Requests\Post;
 
 use Illuminate\Foundation\Http\FormRequest;
+use App\Http\Requests\Post\Concerns\ValidatesPostContent;
+use Illuminate\Http\UploadedFile;
 
 class UpdatePostRequest extends FormRequest
 {
+    use ValidatesPostContent;
+
     /**
      * Determine if the user is authorized to make this request.
      */
@@ -22,10 +26,11 @@ class UpdatePostRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'cover_image' => ['nullable', 'string', 'max:255'],
+            'cover_image' => $this->file('cover_image') instanceof UploadedFile
+                ? ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048']
+                : ['nullable', 'string', 'url', 'max:255'],
             'title' => ['nullable', 'string', 'max:255'],
             'excerpt' => ['nullable', 'string'],
-            'content' => ['nullable', 'string'],
             'status' => ['nullable', 'in:draft,published,archived'],
 
             'post_metas' => ['nullable', 'array'],
@@ -34,6 +39,7 @@ class UpdatePostRequest extends FormRequest
 
             'category_ids' => ['nullable', 'array'],
             'category_ids.*' => ['string', 'exists:categories,id'],
+            ...$this->contentRules(required: false),
         ];
     }
 }

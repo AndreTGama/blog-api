@@ -4,9 +4,12 @@ namespace App\Services\Post;
 
 use App\DataTransferObjects\Common\IndexDTO;
 use App\DataTransferObjects\Post\Request\StorePostDTO;
+use App\DataTransferObjects\Post\Request\UpdatePostDTO;
 use App\Models\Post;
 use App\Supports\SlugGenerator;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Http\UploadedFile;
+use RuntimeException;
 
 class PostService
 {
@@ -54,7 +57,9 @@ class PostService
     public function store(StorePostDTO $dto): Post
     {
         $post = new Post();
-        $post->cover_image = $dto->coverImage;
+        $post->cover_image = $dto->coverImage instanceof UploadedFile
+            ? $this->storeCoverImage($dto->coverImage)
+            : $dto->coverImage;
         $post->title = $dto->title;
         $post->slug = $this->slugGenerator->generateUnique($dto->title, 'posts');
         $post->excerpt = $dto->excerpt;
@@ -95,16 +100,18 @@ class PostService
      * Update an existing post in the database based on the provided data transfer object.
      *
      * @param Post $post The post model instance to be updated.
-     * @param StorePostDTO $dto The data transfer object containing the updated details of the post.
+     * @param UpdatePostDTO $dto The data transfer object containing the updated details of the post.
      * @return Post The updated post instance.
      */
-    public function update(Post $post, StorePostDTO $dto): Post
+    public function update(Post $post, UpdatePostDTO $dto): Post
     {
-        $post->cover_image = $dto->coverImage ?? $post->cover_image;
-        $post->title = $dto->title ?? $post->title;
+        $post->cover_image = $dto->coverImage instanceof UploadedFile
+            ? $this->storeCoverImage($dto->coverImage)
+            : ($dto->coverImage ?? $post->cover_image);
         if ($dto->title && $dto->title !== $post->title) {
             $post->slug = $this->slugGenerator->generateUnique($dto->title, 'posts');
         }
+        $post->title = $dto->title ?? $post->title;
         $post->excerpt = $dto->excerpt ?? $post->excerpt;
         $post->content = $dto->content ?? $post->content;
         $post->status = $dto->status ?? $post->status;
@@ -125,7 +132,7 @@ class PostService
             }
         }
 
-        if (isset($dto->categoryIds)) {
+        if ($dto->categoryIds !== null) {
             $post->categories()->sync($dto->categoryIds);
         }
 
@@ -152,5 +159,16 @@ class PostService
     public function restore(Post $post): void
     {
         $post->restore();
+    }
+
+    private function storeCoverImage(UploadedFile $image): string
+    {
+        $path = $image->store('posts/thumbnails', 'public');
+
+        if (!is_string($path)) {
+            throw new RuntimeException('The post cover image could not be stored.');
+        }
+
+        return $path;
     }
 }

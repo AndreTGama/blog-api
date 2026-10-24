@@ -7,6 +7,7 @@ use App\Http\Resources\PostMeta\PostMetaResource;
 use App\Http\Resources\User\UserResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Storage;
 
 class PostResource extends JsonResource
 {
@@ -19,7 +20,11 @@ class PostResource extends JsonResource
     {
         return [
             'id'           => $this->id,
-            'cover_image'  => $this->cover_image,
+            'cover_image'  => $this->cover_image
+                ? (filter_var($this->cover_image, FILTER_VALIDATE_URL)
+                    ? $this->cover_image
+                    : Storage::disk('public')->url($this->cover_image))
+                : null,
             'title'        => $this->title,
             'slug'         => $this->slug,
             'excerpt'      => $this->excerpt,
