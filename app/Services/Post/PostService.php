@@ -65,6 +65,7 @@ class PostService
         $post->excerpt = $dto->excerpt;
         $post->content = $dto->content;
         $post->status = $dto->status;
+        $post->allow_comments = $dto->allowComments;
         $post->author_id = auth()->id();
 
         $post->save();
@@ -115,6 +116,7 @@ class PostService
         $post->excerpt = $dto->excerpt ?? $post->excerpt;
         $post->content = $dto->content ?? $post->content;
         $post->status = $dto->status ?? $post->status;
+        $post->allow_comments = $dto->allowComments ?? $post->allow_comments;
 
         $post->save();
 

@@ -61,6 +61,10 @@ A ordem dos itens em `content` é a ordem em que o artigo deve ser exibido. Cada
 
 O campo opcional `cover_image` aceita uma imagem JPEG, PNG ou WebP de até 2 MB no envio multipart/form-data. A imagem é salva no disco público em `posts/thumbnails`, e a API devolve sua URL no campo `cover_image`. Para disponibilizar arquivos locais, execute `php artisan storage:link`. URLs de imagem já existentes continuam aceitas para manter compatibilidade.
 
+## Comentários nos posts
+
+O campo opcional `allow_comments` controla se um post permite comentários. Por padrão, posts novos não permitem comentários (`false`). Envie `true` ao criar ou atualizar um post para habilitá-los; em atualizações, omitir o campo mantém o valor atual.
+
 ## Learning Laravel
 
 Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.

@@ -32,6 +32,7 @@ class StorePostRequest extends FormRequest
             'title' => ['required', 'string', 'max:255'],
             'excerpt' => ['required', 'string'],
             'status' => ['required', 'in:draft,published,archived'],
+            'allow_comments' => ['sometimes', 'boolean'],
 
             'post_metas' => ['nullable', 'array'],
             'post_metas.*.key' => ['required_with:post_metas', 'string', 'max:255'],

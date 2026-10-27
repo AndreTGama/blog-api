@@ -15,6 +15,7 @@ class UpdatePostDTO
         public ?string $status,
         public ?array $postMetas,
         public ?array $categoryIds,
+        public ?bool $allowComments = null,
     ) {}
 
     public static function fromArray(array $data): self
@@ -25,6 +26,7 @@ class UpdatePostDTO
             excerpt: $data['excerpt'] ?? null,
             content: $data['content'] ?? null,
             status: $data['status'] ?? null,
+            allowComments: $data['allow_comments'] ?? null,
             postMetas: array_key_exists('post_metas', $data)
                 ? array_map(fn ($meta) => IndexPostMetaDTO::fromArray($meta), $data['post_metas'])
                 : null,

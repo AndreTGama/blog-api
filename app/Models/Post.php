@@ -23,6 +23,7 @@ class Post extends Model
      */
     protected $fillable = [
         'cover_image',
+        'allow_comments',
         'title',
         'slug',
         'excerpt',
@@ -39,6 +40,7 @@ class Post extends Model
      * @var array<string, string>
      */
     protected $casts = [
+        'allow_comments' => 'boolean',
         'published_at' => 'datetime',
     ];
 

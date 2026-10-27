@@ -25,6 +25,7 @@ class PostResource extends JsonResource
                     ? $this->cover_image
                     : Storage::disk('public')->url($this->cover_image))
                 : null,
+            'allow_comments' => $this->allow_comments,
             'title'        => $this->title,
             'slug'         => $this->slug,
             'excerpt'      => $this->excerpt,

@@ -32,6 +32,7 @@ class UpdatePostRequest extends FormRequest
             'title' => ['nullable', 'string', 'max:255'],
             'excerpt' => ['nullable', 'string'],
             'status' => ['nullable', 'in:draft,published,archived'],
+            'allow_comments' => ['sometimes', 'boolean'],
 
             'post_metas' => ['nullable', 'array'],
             'post_metas.*.key' => ['required_with:post_metas', 'string', 'max:255'],
