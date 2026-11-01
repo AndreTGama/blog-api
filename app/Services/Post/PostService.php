@@ -9,6 +9,7 @@ use App\Models\Post;
 use App\Supports\SlugGenerator;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Str;
 use RuntimeException;
 
 class PostService
@@ -43,6 +44,10 @@ class PostService
             });
         }
 
+        if (!empty($dto->filters['locale'])) {
+            $query->where('locale', $dto->filters['locale']);
+        }
+
         $query->orderBy($dto->orderBy, $dto->orderDirection);
         $query->with($this->loads);
         return $query->paginate($dto->limit, ['*'], 'page', $dto->page);
@@ -60,6 +65,8 @@ class PostService
         $post->cover_image = $dto->coverImage instanceof UploadedFile
             ? $this->storeCoverImage($dto->coverImage)
             : $dto->coverImage;
+        $post->locale = $dto->locale;
+        $post->translation_group_id = $dto->translationGroupId ?? (string) Str::uuid();
         $post->title = $dto->title;
         $post->slug = $this->slugGenerator->generateUnique($dto->title, 'posts');
         $post->excerpt = $dto->excerpt;
@@ -94,7 +101,7 @@ class PostService
      */
     public function show(Post $post): Post
     {
-        return $post->load($this->loads);
+        return $post->load([...$this->loads, 'translations']);
     }
 
     /**

@@ -5,6 +5,7 @@ namespace Database\Factories;
 use App\Models\Post;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Post>
@@ -22,6 +23,8 @@ class PostFactory extends Factory
     {
         return [
             'cover_image' => $this->faker->imageUrl(640, 480, 'posts', true),
+            'locale' => 'pt',
+            'translation_group_id' => (string) Str::uuid(),
             'title' => $this->faker->sentence(),
             'slug' => $this->faker->slug(),
             'excerpt' => $this->faker->paragraph(),

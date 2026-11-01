@@ -28,7 +28,9 @@ class StorePostDTO
         public string            $status,
         public ?array            $postMetas,
         public array             $categoryIds,
-        public bool              $allowComments = false
+        public bool              $allowComments = false,
+        public string            $locale = 'pt',
+        public ?string           $translationGroupId = null,
     ) {}
 
     /**
@@ -47,7 +49,9 @@ class StorePostDTO
             status: $data['status'],
             postMetas: array_key_exists('post_meta', $data) ? array_map(fn($meta) => IndexPostMetaDTO::fromArray($meta), $data['post_metas']) : null,
             categoryIds: $data['category_ids'] ?? [],
-            allowComments: $data['allow_comments'] ?? false
+            allowComments: $data['allow_comments'] ?? false,
+            locale: $data['locale'] ?? 'pt',
+            translationGroupId: $data['translation_group_id'] ?? null,
         );
     }
 
@@ -76,6 +80,8 @@ class StorePostDTO
             'content' => $this->content,
             'status' => $this->status,
             'allow_comments' => $this->allowComments,
+            'locale' => $this->locale,
+            'translation_group_id' => $this->translationGroupId,
             'post_metas' => $this->postMetas ? array_map(fn($meta) => $meta->toArray(), $this->postMetas) : null,
             'category_ids' => $this->categoryIds
         ];

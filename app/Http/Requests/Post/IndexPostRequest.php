@@ -30,6 +30,7 @@ class IndexPostRequest extends IndexRequest
 
             'filters' => ['sometimes', 'array'],
             'filters.search' => ['sometimes', 'string'],
+            'filters.locale' => ['sometimes', 'string', 'in:pt,en'],
         ];
     }
 }

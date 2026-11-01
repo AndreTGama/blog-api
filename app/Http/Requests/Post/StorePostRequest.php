@@ -5,6 +5,7 @@ namespace App\Http\Requests\Post;
 use Illuminate\Foundation\Http\FormRequest;
 use App\Http\Requests\Post\Concerns\ValidatesPostContent;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Validation\Rule;
 
 class StorePostRequest extends FormRequest
 {
@@ -33,6 +34,16 @@ class StorePostRequest extends FormRequest
             'excerpt' => ['required', 'string'],
             'status' => ['required', 'in:draft,published,archived'],
             'allow_comments' => ['sometimes', 'boolean'],
+            'locale' => ['sometimes', 'string', Rule::in(['pt', 'en'])],
+            'translation_group_id' => [
+                'nullable',
+                'uuid',
+                Rule::exists('posts', 'translation_group_id'),
+                Rule::unique('posts', 'translation_group_id')->where(
+                    'locale',
+                    $this->input('locale', 'pt'),
+                ),
+            ],
 
             'post_metas' => ['nullable', 'array'],
             'post_metas.*.key' => ['required_with:post_metas', 'string', 'max:255'],

@@ -26,6 +26,8 @@ class PostResource extends JsonResource
                     : Storage::disk('public')->url($this->cover_image))
                 : null,
             'allow_comments' => $this->allow_comments,
+            'locale' => $this->locale,
+            'translation_group_id' => $this->translation_group_id,
             'title'        => $this->title,
             'slug'         => $this->slug,
             'excerpt'      => $this->excerpt,
@@ -35,6 +37,17 @@ class PostResource extends JsonResource
             'published_at' => $this->published_at,
             'author'       => new UserResource($this->whenLoaded('author')),
             'categories'   => CategoryResource::collection($this->whenLoaded('categories')),
+            'translations' => $this->whenLoaded(
+                'translations',
+                fn () => $this->translations
+                    ->where('status', 'published')
+                    ->reject(fn ($translation) => $translation->is($this->resource))
+                    ->map(fn ($translation) => [
+                        'locale' => $translation->locale,
+                        'slug' => $translation->slug,
+                    ])
+                    ->values(),
+            ),
             'post_metas'   => PostMetaResource::collection($this->whenLoaded('postMetas')),
             'created_at'   => $this->created_at,
             'updated_at'   => $this->updated_at,

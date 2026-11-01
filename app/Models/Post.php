@@ -24,6 +24,8 @@ class Post extends Model
     protected $fillable = [
         'cover_image',
         'allow_comments',
+        'locale',
+        'translation_group_id',
         'title',
         'slug',
         'excerpt',
@@ -107,5 +109,11 @@ class Post extends Model
     public function categories()
     {
         return $this->belongsToMany(Category::class, 'post_categories', 'post_id', 'category_id');
+    }
+
+    public function translations()
+    {
+        return $this->hasMany(self::class, 'translation_group_id', 'translation_group_id')
+            ->where('id', '!=', $this->id);
     }
 }

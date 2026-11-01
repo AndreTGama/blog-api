@@ -13,6 +13,7 @@ use App\Http\Resources\Post\PostResource;
 use App\Models\Post;
 use App\Responses\ApiResponse;
 use App\Services\Post\PostService;
+use Illuminate\Http\Request;
 
 class PostController extends Controller
 {
@@ -61,12 +62,19 @@ class PostController extends Controller
     /**
      * Display the specified post.
      *
-     * @param Post $postResource The post model instance to be displayed.
+     * @param Post $post The post model instance to be displayed.
      * @return \Illuminate\Http\JsonResponse A JSON response containing the details of the specified post.
      */
-    public function show(Post $postResource)
+    public function show(Post $post, Request $request)
     {
-        $data = $this->postService->show(post: $postResource);
+        $sessionKey = "viewed_posts.{$post->id}";
+
+        if (!$request->session()->has($sessionKey)) {
+            $post->increment('views');
+            $request->session()->put($sessionKey, true);
+        }
+
+        $data = $this->postService->show(post: $post);
         return ApiResponse::success(
             message: 'Post retrieved successfully.',
             data: new PostResource($data),
