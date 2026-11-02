@@ -14,24 +14,12 @@ class CategorySeeder extends Seeder
     {
         $data = [
             [
-                'name' => 'Technology',
-                'slug' => 'technology',
+                'name' => 'Coding',
+                'slug' => 'coding',
             ],
             [
-                'name' => 'Health',
-                'slug' => 'health',
-            ],
-            [
-                'name' => 'Travel',
-                'slug' => 'travel',
-            ],
-            [
-                'name' => 'Food',
-                'slug' => 'food',
-            ],
-            [
-                'name' => 'Education',
-                'slug' => 'education',
+                'name' => 'Devops',
+                'slug' => 'devops',
             ],
         ];
         

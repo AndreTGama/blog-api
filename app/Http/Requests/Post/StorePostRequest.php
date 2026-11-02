@@ -28,8 +28,8 @@ class StorePostRequest extends FormRequest
     {
         return [
             'cover_image' => $this->file('cover_image') instanceof UploadedFile
-                ? ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048']
-                : ['nullable', 'string', 'url', 'max:255'],
+                ? ['required', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048']
+                : ['required', 'string', 'url', 'max:255'],
             'title' => ['required', 'string', 'max:255'],
             'excerpt' => ['required', 'string'],
             'status' => ['required', 'in:draft,published,archived'],
